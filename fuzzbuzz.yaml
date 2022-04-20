@@ -1,0 +1,14 @@
+# 'base' is just a placeholder. the top-level name in this file can be any valid yaml key
+base:
+  # 'engine' needs to be provided for C and C++ projects
+  language: c
+  engine: libFuzzer
+  # place your fuzz test build steps here:
+  steps:
+    - run: make
+    - run: make fuzzer
+  # define the sanitizers that Fuzzbuzz should use. Each sanitizer enables detection of
+  # a particular class of bug.
+  sanitizers:
+    address: {}
+    undefined: {}
