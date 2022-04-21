@@ -1,17 +1,14 @@
-CC=clang
-DEPS=main.c fuzzgoat.c
-ASAN= #-fsanitize=address
-CFLAGS=-I.
+DEPS=fuzzgoat.c main.c
 LIBS=-lm
 
 all: $(DEPS)
-	$(CC) -w -o fuzzgoat $(CFLAGS) $^ $(LIBS)
-	$(CC) -w -o fuzzgoat_ASAN $(CFLAGS) $^ $(LIBS)
+	$(CC) -w -I. -o fuzzgoat $(CFLAGS) $^ $(LIBS)
 
-afl: fuzzgoat
-	afl-fuzz -i in -o out ./fuzzgoat @@
+fuzzer: $(DEPS)
+	$(CC) -w -o parse-json-fuzzer -pthread -DFUZZING $(CFLAGS) -fsanitize=fuzzer $^ $(LIBS)
 
 .PHONY: clean
 
 clean:
-	rm ./fuzzgoat ./fuzzgoat_ASAN
+	rm -f ./fuzzgoat ./parse-json-fuzzer
+
